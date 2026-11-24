@@ -1,0 +1,28 @@
+name: pipeline
+
+on:
+  pull_request:
+    paths: ["pipeline/**", "contracts/**", ".github/workflows/pipeline.yml"]
+  push:
+    branches: [main]
+    paths: ["pipeline/**", "contracts/**", ".github/workflows/pipeline.yml"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pipeline/requirements.txt
+      - run: pip install -r requirements-test.txt
+      # compose.json is generated: fail when it was edited by hand or not regenerated (RF-11)
+      - run: python build_compose.py && git diff --exit-code compose.json
+      - run: python -m py_compile spark/*.py common/*.py remote/*.py
+      # 수집 API 계약·분류·DLQ·런처 이벤트 형식 단위 테스트 (Kafka 없이 동작)
+      - run: python -m pytest -q

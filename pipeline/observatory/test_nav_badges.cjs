@@ -1,0 +1,16 @@
+const {readFileSync}=require('node:fs');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const nodes=new Map();
+const context={document:{getElementById(id){if(!nodes.has(id))nodes.set(id,{classList:{toggle(k,v){this[k]=v;}},closest(){return this.link;},link:{setAttribute(k,v){this[k]=v;}}});return nodes.get(id);}}};
+vm.createContext(context);
+vm.runInContext(readFileSync(__dirname+'/static/nav-badges.js','utf8')+';this.counts=observatoryMenuCounts;this.badge=setObservatoryBadge;',context);
+const input={progress:{state:'ok'},alerts:[{id:'slow:silver'},{id:'stalled:silver'},{id:'stopped:bronze'},{id:'context-age'}],queue:{counts:{pending:200,processing:1,stored:500,waiting_context:19,quarantined:28,parked:2,blocked:1}}};
+let counts=context.counts(input);
+assert.equal(counts.overview,4);assert.equal(counts.queries,2);assert.equal(counts.queue,50);
+counts=context.counts({progress:{state:'unavailable'},alerts:[],queue:{counts:null}});
+assert.equal(counts.queries,null);assert.equal(counts.queue,null);
+context.badge('queries',0,'queries');assert.equal(nodes.get('nav-queries-count').classList.hidden,true);
+context.badge('queue',120,'queue');assert.equal(nodes.get('nav-queue-count').textContent,'99+');assert.equal(nodes.get('nav-queue-count').link.title,'queue: 120개');
+context.badge('queue',null,'queue');assert.equal(nodes.get('nav-queue-count').textContent,'?');
+console.log('Menu badge checks passed: distinct queries, attention records, unknown, zero hidden, 99+ and exact accessible count.');

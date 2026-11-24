@@ -1,0 +1,27 @@
+{
+  "folders": [
+    { "name": "📦 root", "path": "." },
+    { "name": "🎮 game", "path": "game" },
+    { "name": "🔀 pipeline", "path": "pipeline" },
+    { "name": "🖥️ server", "path": "server" },
+    { "name": "📜 contracts", "path": "contracts" },
+    { "name": "📚 docs", "path": "docs" }
+  ],
+  "settings": {
+    "files.eol": "\n",
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.godot": true
+    },
+    "python.terminal.activateEnvironment": true
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "geequlim.godot-tools",
+      "batisteo.vscode-django",
+      "eamodio.gitlens"
+    ]
+  }
+}

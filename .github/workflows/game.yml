@@ -1,0 +1,24 @@
+name: game
+
+on:
+  pull_request:
+    paths: ["game/**", "contracts/**", ".github/workflows/game.yml"]
+  push:
+    branches: [main]
+    paths: ["game/**", "contracts/**", ".github/workflows/game.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      # 골격: 게임 코드를 가져온 뒤 Godot 헤드리스 import/내보내기 검사로 바꾸세요.
+      # 지금은 클라이언트 코드에 API 키가 들어가지 않았는지만 확인합니다.
+      - name: 클라이언트 코드에 API 키가 없는지 확인
+        run: |
+          if grep -rEn --include='*.js' --include='*.gd' --include='*.json' --include='*.cfg' \
+               '(gsk_|sk-|AIza)[A-Za-z0-9_-]{16,}' game/; then
+            echo "::error::game/ 에 API 키로 보이는 문자열이 있습니다"; exit 1
+          fi

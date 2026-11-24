@@ -1,0 +1,27 @@
+name: server
+
+on:
+  pull_request:
+    paths: ["server/**", "contracts/**", ".github/workflows/server.yml"]
+  push:
+    branches: [main]
+    paths: ["server/**", "contracts/**", ".github/workflows/server.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: server/requirements.txt
+      - run: sudo apt-get update && sudo apt-get install -y pkg-config default-libmysqlclient-dev
+      - run: pip install -r requirements.txt
+      # 골격: 문법 검사만. MySQL·MongoDB 서비스 컨테이너를 붙인 뒤
+      # `python manage.py test accounts telemetry` 로 바꾸세요.
+      - run: python -m compileall -q .

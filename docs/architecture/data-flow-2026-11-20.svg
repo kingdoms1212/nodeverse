@@ -1,0 +1,221 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1010" viewBox="0 0 1800 1010" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f6f4f"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2c5d8f"/></marker>
+    <style>
+      .zone{fill:#f6f7f9;stroke:#c9ced6;stroke-width:1.5;rx:14}
+      .zt{font-size:15px;font-weight:700;fill:#4a5260}
+      .box{fill:#ffffff;stroke:#7d8796;stroke-width:1.5}
+      .t{font-size:15px;font-weight:700;fill:#1f2430}
+      .s{font-size:12.5px;fill:#4a5260}
+      .flow{stroke:#2f6f4f;stroke-width:2;fill:none;marker-end:url(#a)}
+      .api{stroke:#2c5d8f;stroke-width:2;fill:none;marker-end:url(#b)}
+      .bad{stroke:#c0392b;stroke-width:2;fill:none;stroke-dasharray:7 5;marker-end:url(#r)}
+      .gap{fill:#fff5f4;stroke:#c0392b;stroke-width:1.8;stroke-dasharray:7 5}
+      .warn{font-size:12.5px;font-weight:700;fill:#c0392b}
+      .lbl{font-size:12px;fill:#2f6f4f}
+      .lblb{font-size:12px;fill:#2c5d8f}
+      .bn{fill:#f39c12}
+      .bnt{font-size:11px;font-weight:700;fill:#ffffff}
+      .pt{font-size:11px;font-weight:700;fill:#ffffff}
+      .pf{fill:#c0392b}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1800" height="1010" fill="#ffffff"/>
+  <text x="30" y="42" font-size="24" font-weight="700" fill="#1f2430">NODEVERSE 현재 데이터 흐름 (통합 저장소 main · 2026-11-20)</text>
+  <text x="30" y="66" class="s">코드 기준 정리 · 그림의 번호는 docs/DATA_FLOW_AND_GAPS.md 항목</text>
+
+  <!-- Zone A: game PC -->
+  <rect class="zone" x="20" y="85" width="280" height="420" rx="14"/>
+  <text class="zt" x="36" y="110">게임 PC</text>
+  <rect class="box" x="40" y="125" width="240" height="185" rx="10"/>
+  <text class="t" x="56" y="152">게임 EXE (Godot 4.7.2)</text>
+  <text class="s" x="56" y="176">NetworkManager</text>
+  <text class="s" x="56" y="196">디스크 큐 pending/ → rejected/</text>
+  <text class="s" x="56" y="216">learning 8종 · update 9종</text>
+  <text class="s" x="56" y="236">POST /v2/events + X-API-Key</text>
+  <text class="s" x="56" y="256">실패 시 1~60초 재시도</text>
+  <text class="warn" x="56" y="284">⚠ 큐 앞 막힘·401 영구 거부</text>
+  <rect class="pf" x="222" y="132" width="50" height="18" rx="9"/><text class="pt" x="229" y="145">GM-1,2</text>
+
+  <rect class="box" x="40" y="345" width="240" height="135" rx="10"/>
+  <text class="t" x="56" y="372">launcher.exe</text>
+  <text class="s" x="56" y="396">SQLite 큐</text>
+  <text class="s" x="56" y="416">run_* · exit_* (runtime v1)</text>
+  <text class="s" x="56" y="436">POST /v1/events</text>
+  <text class="s" x="56" y="458">게임 실행·비정상 종료 감시</text>
+
+  <!-- Zone B: pipeline PC -->
+  <rect class="zone" x="320" y="85" width="1100" height="740" rx="14"/>
+  <text class="zt" x="336" y="110">파이프라인 PC (.81) — Docker Compose</text>
+
+  <rect class="gap" x="345" y="125" width="205" height="115" rx="10"/>
+  <text class="t" x="361" y="152">게이트웨이 :8000</text>
+  <text class="s" x="361" y="176">v1 수집 + v2 브리지</text>
+  <text class="s" x="361" y="196">→ v2 수집기로 전달</text>
+  <text class="warn" x="361" y="222">⚠ 이 저장소에 없음</text>
+  <rect class="pf" x="502" y="132" width="40" height="18" rx="9"/><text class="pt" x="508" y="145">PL-1</text>
+
+  <rect class="box" x="345" y="290" width="205" height="225" rx="10"/>
+  <text class="t" x="361" y="317">수집기 :8003</text>
+  <text class="s" x="361" y="341">① 키 확인 (24자 이상)</text>
+  <text class="s" x="361" y="361">② JSON·스키마 검사</text>
+  <text class="s" x="361" y="381">③ 토픽 분류</text>
+  <text class="s" x="361" y="401">④ Kafka acks=all 확인</text>
+  <text class="s" x="361" y="425">202 접수</text>
+  <text class="s" x="361" y="445">422 → DLQ 기록</text>
+  <text class="s" x="361" y="465">503 Kafka 장애 (재전송 요청)</text>
+  <text class="warn" x="361" y="495">⚠ 장애 시 요청당 12초 대기</text>
+  <rect class="bn" x="500" y="297" width="44" height="18" rx="9"/><text class="bnt" x="506" y="310">BN-9</text>
+
+  <!-- Kafka -->
+  <rect class="box" x="580" y="125" width="215" height="390" rx="10" fill="#fbfcfd"/>
+  <text class="t" x="596" y="152">Kafka 3대</text>
+  <text class="s" x="596" y="172">복제 3 · 보관 7일</text>
+  <rect class="box" x="596" y="188" width="183" height="46" rx="8"/>
+  <text class="s" x="608" y="208" font-weight="700">nv.learning.v2 (6)</text><text class="s" x="608" y="226">key session_id</text>
+  <rect class="box" x="596" y="244" width="183" height="46" rx="8"/>
+  <text class="s" x="608" y="264" font-weight="700">nv.update.v1 (3)</text><text class="s" x="608" y="282">key player_id</text>
+  <rect class="box" x="596" y="300" width="183" height="46" rx="8"/>
+  <text class="s" x="608" y="320" font-weight="700">nv.runtime.v1 (3)</text><text class="s" x="608" y="338">key run_id</text>
+  <rect class="gap" x="596" y="380" width="183" height="50" rx="8"/>
+  <text class="s" x="608" y="400" font-weight="700">nv.dlq.v1 (3)</text><text class="warn" x="608" y="420">⚠ 읽는 쪽 없음 PL-8</text>
+  <rect class="box" x="596" y="446" width="183" height="46" rx="8" stroke-dasharray="4 3"/>
+  <text class="s" x="608" y="466" font-weight="700">nv.bundle.v2 (3)</text><text class="s" x="608" y="484">예약 (사용 안 함)</text>
+
+  <!-- Spark -->
+  <rect class="box" x="825" y="125" width="330" height="490" rx="10" fill="#fbfcfd"/>
+  <text class="t" x="841" y="152">Spark 3.5 + Delta Lake</text>
+  <text class="s" x="841" y="172">앱 1개 · 스트리밍 쿼리 7개 · 체크포인트별 복구</text>
+  <rect class="box" x="841" y="186" width="298" height="56" rx="8"/>
+  <text class="t" x="855" y="210" font-size="14">Bronze  game_events</text>
+  <text class="s" x="855" y="230">Kafka 원본 그대로 append · 5초</text>
+
+  <rect class="box" x="841" y="266" width="298" height="78" rx="8"/>
+  <text class="t" x="855" y="290" font-size="14">Silver  learning·update</text>
+  <text class="s" x="855" y="310">필수 필드 → event_id 중복 제거(7일)</text>
+  <text class="s" x="855" y="330">→ insert-only MERGE · 1초</text>
+  <rect class="bn" x="1040" y="275" width="92" height="18" rx="9"/><text class="bnt" x="1047" y="286">BN-1 · BN-3</text>
+
+  <rect class="gap" x="841" y="362" width="298" height="52" rx="8"/>
+  <text class="t" x="855" y="384" font-size="14" fill="#c0392b">silver.quarantine (격리)</text>
+  <text class="s" x="855" y="404">invalid_json · invalid_schema · id_conflict</text>
+
+  <rect class="box" x="841" y="432" width="298" height="78" rx="8"/>
+  <text class="t" x="855" y="456" font-size="14">Gold  1분·5분 집계</text>
+  <text class="s" x="855" y="476">minigame_1m · failure_alerts · update_5m</text>
+  <text class="s" x="855" y="496">워터마크 2분 · MERGE 하한 조건</text>
+  <rect class="bn" x="1084" y="439" width="48" height="18" rx="9"/><text class="bnt" x="1091" y="452">BN-2</text>
+
+  <text class="s" x="841" y="535">주기 작업: rt_summary 10초 · rt_versions 60초</text>
+  <text class="warn" x="841" y="560">⚠ 쿼리 하나 실패 → 7개 모두 멈추고 재시작</text>
+  <rect class="pf" x="1100" y="547" width="40" height="18" rx="9"/><text class="pt" x="1106" y="560">PL-2</text>
+  <text class="s" x="841" y="585">⏱ 지연: 12.89초(1회) / 부하 10~53초</text>
+  <rect class="bn" x="1088" y="572" width="48" height="18" rx="9"/><text class="bnt" x="1095" y="585">BN-4</text>
+
+  <!-- local mongo -->
+  <rect class="box" x="1185" y="125" width="215" height="275" rx="10" fill="#fbfcfd"/>
+  <text class="t" x="1201" y="152">로컬 MongoDB</text>
+  <rect class="box" x="1199" y="168" width="187" height="88" rx="8"/>
+  <text class="s" x="1211" y="190" font-weight="700">rt_* 실시간 집계</text>
+  <text class="s" x="1211" y="210">rt_minigame_1m · rt_alerts</text>
+  <text class="s" x="1211" y="228">rt_updates · rt_versions</text>
+  <text class="s" x="1211" y="246">rt_summary</text>
+  <rect class="box" x="1199" y="272" width="187" height="112" rx="8"/>
+  <text class="s" x="1211" y="294" font-weight="700">remote_event_outbox</text>
+  <text class="s" x="1211" y="314">pending → stored</text>
+  <text class="s" x="1211" y="332">retrying (무한)</text>
+  <text class="s" x="1211" y="350">waiting_context (기한 없음)</text>
+  <text class="warn" x="1211" y="370">blocked (멈춤) PL-9</text>
+
+  <rect class="box" x="1185" y="470" width="215" height="150" rx="10"/>
+  <text class="t" x="1201" y="497">remote-writer</text>
+  <text class="s" x="1201" y="519">작업자 1개 (lease)</text>
+  <text class="s" x="1201" y="539">원본 보관 → 관계형 투영</text>
+  <text class="s" x="1201" y="559">세션 안 sequence 순서 검증</text>
+  <text class="s" x="1201" y="579">rt_* 5초마다 전체 복사</text>
+  <rect class="bn" x="1201" y="592" width="136" height="18" rx="9"/><text class="bnt" x="1209" y="605">BN-5 · BN-6 · BN-7</text>
+
+  <!-- Zone C: DB PC -->
+  <rect class="zone" x="1450" y="85" width="330" height="340" rx="14"/>
+  <text class="zt" x="1466" y="110">DB PC (.167)</text>
+  <rect class="box" x="1468" y="125" width="294" height="70" rx="10"/>
+  <text class="t" x="1484" y="152">MySQL  nodeverse</text>
+  <text class="s" x="1484" y="176">game_members · 회원·관리자 계정</text>
+  <rect class="box" x="1468" y="215" width="294" height="190" rx="10"/>
+  <text class="t" x="1484" y="242">MongoDB  nodeverse_logs</text>
+  <text class="s" x="1484" y="266">game_sessions · game_problems</text>
+  <text class="s" x="1484" y="286">problem_runs · solution_attempts</text>
+  <text class="s" x="1484" y="306">gameplay_events</text>
+  <text class="s" x="1484" y="330">pipeline_learning_events (원본)</text>
+  <text class="s" x="1484" y="354">rt_* 사본 (실시간 화면용)</text>
+  <text class="s" x="1484" y="380">update · runtime 원본 archive</text>
+
+  <!-- Zone D: dashboard PC -->
+  <rect class="zone" x="1450" y="450" width="330" height="375" rx="14"/>
+  <text class="zt" x="1466" y="475">대시보드 PC (.29)</text>
+  <rect class="box" x="1468" y="490" width="294" height="180" rx="10"/>
+  <text class="t" x="1484" y="517">Django 서버 :8000</text>
+  <text class="s" x="1484" y="541">staff/ 개요 · 이벤트 · 회원 · 실시간</text>
+  <text class="s" x="1484" y="561">staff/releases 배포·업데이트 관리</text>
+  <text class="s" x="1484" y="585">/api/game/auth/* 회원·세이브</text>
+  <text class="s" x="1484" y="605">/api/game/manifest 업데이트 확인</text>
+  <text class="s" x="1484" y="625">/api/game/player-login</text>
+  <text class="s" x="1484" y="649">회원 MySQL · 기록 MongoDB 읽기</text>
+  <rect class="gap" x="1468" y="690" width="294" height="115" rx="10"/>
+  <text class="t" x="1484" y="716">소개 웹사이트</text>
+  <text class="s" x="1484" y="738">game/website ≈ server/website (중복)</text>
+  <text class="s" x="1484" y="758">코봇 채팅 → Groq API 직접 호출</text>
+  <text class="warn" x="1484" y="784">⚠ 키 노출 구조 CM-2</text>
+
+  <!-- arrows: game -> gateway -> collector -->
+  <path class="flow" d="M280,200 L345,170"/>
+  <text class="lbl" x="284" y="178">v2</text>
+  <path class="flow" d="M280,400 C315,400 315,215 345,215"/>
+  <text class="lbl" x="300" y="330">v1</text>
+  <path class="flow" d="M447,240 L447,290"/>
+  <!-- collector -> kafka -->
+  <path class="flow" d="M550,350 L596,211"/>
+  <path class="flow" d="M550,372 L596,267"/>
+  <path class="flow" d="M550,394 L596,323"/>
+  <path class="bad" d="M550,445 L596,405"/>
+  <!-- kafka -> bronze -->
+  <path class="flow" d="M779,211 L841,206"/>
+  <path class="flow" d="M779,267 C810,267 810,214 841,214"/>
+  <path class="flow" d="M779,323 C815,323 815,222 841,222"/>
+  <!-- bronze -> silver / quarantine -->
+  <path class="flow" d="M990,242 L990,266"/>
+  <path class="bad" d="M1139,214 L1150,214 L1150,388 L1139,388"/>
+  <!-- silver -> gold -->
+  <path class="flow" d="M841,320 L833,320 L833,471 L841,471"/>
+  <!-- gold -> rt ; silver -> outbox -->
+  <path class="flow" d="M1139,471 C1165,471 1165,212 1199,212"/>
+  <text class="lbl" x="1150" y="460">upsert</text>
+  <path class="flow" d="M1139,300 C1170,300 1170,328 1199,328"/>
+  <text class="lbl" x="1158" y="294">stage</text>
+  <!-- outbox -> writer ; rt -> writer -->
+  <path class="flow" d="M1292,384 L1292,470"/>
+  <path class="flow" d="M1386,212 L1412,212 L1412,560 L1400,560"/>
+  <!-- writer -> remote DB -->
+  <path class="flow" d="M1400,500 C1430,500 1430,165 1468,165"/>
+  <path class="flow" d="M1400,520 C1440,520 1440,300 1468,300"/>
+  <!-- DB -> Django -->
+  <path class="api" d="M1615,405 L1615,490"/>
+  <text class="lblb" x="1622" y="452">읽기</text>
+
+  <!-- direct lane game -> django -->
+  <path class="api" d="M40,200 L27,200 L27,870 L1434,870 L1434,630 L1468,630"/>
+  <text class="lblb" x="60" y="862">회원가입·로그인·클라우드 세이브·업데이트 확인 (게임 → Django 직접 호출)</text>
+  <path class="bad" d="M40,240 L34,240 L34,935 L1442,935 L1442,655 L1468,655"/>
+  <text class="warn" x="60" y="927">player-login: 지금은 수집기 주소로 보내고 수집 키를 써서 항상 실패 (GM-3)</text>
+
+  <!-- legend -->
+  <rect x="1020" y="955" width="760" height="44" rx="8" fill="#f6f7f9" stroke="#c9ced6"/>
+  <path class="flow" d="M1036,977 L1080,977"/><text class="s" x="1088" y="981">이벤트 데이터</text>
+  <path class="api" d="M1190,977 L1234,977"/><text class="s" x="1242" y="981">API 호출·읽기</text>
+  <path class="bad" d="M1350,977 L1394,977"/><text class="s" x="1402" y="981">문제·오류 경로</text>
+  <rect class="bn" x="1508" y="968" width="44" height="18" rx="9"/><text class="bnt" x="1514" y="981">BN</text><text class="s" x="1560" y="981">병목</text>
+  <rect class="pf" x="1608" y="968" width="44" height="18" rx="9"/><text class="pt" x="1614" y="981">PL·GM</text><text class="s" x="1660" y="981">보완 필요</text>
+</svg>

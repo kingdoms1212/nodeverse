@@ -1,0 +1,42 @@
+name: nodeverse-silver-experiment
+services:
+  benchmark:
+    image: nodeverse-v2-live-spark:latest
+    user: '0:0'
+    network_mode: none
+    cpus: 2
+    mem_limit: 3g
+    environment:
+      PYTHONPATH: /app:/opt/nodeverse
+      SPARK_LOCAL_IP: 127.0.0.1
+      SHUFFLE_PARTITIONS: '2'
+      REMOTE_EXPORT_ENABLED: '0'
+      SILVER_OPTIMIZATION_ENABLED: '1'
+      COMPACT_EVERY_BATCHES: '0'
+      SILVER_MAX_MERGE_GROUPS: '16'
+    volumes:
+      - ./spark:/app:ro
+      - ./common:/opt/nodeverse/common:ro
+      - ./remote:/opt/nodeverse/remote:ro
+      - ./tools:/tools:ro
+      - '${SILVER_EXPERIMENT_OUTPUT:-./results/silver-new-run}:/experiment'
+      - experiment-ivy:/ivy:ro
+    entrypoint: /opt/spark/bin/spark-submit
+    command:
+      - --master
+      - local[2]
+      - --driver-memory
+      - 1g
+      - --conf
+      - spark.driver.host=127.0.0.1
+      - --conf
+      - spark.eventLog.enabled=true
+      - --conf
+      - spark.eventLog.dir=file:///experiment/events
+      - --jars
+      - /ivy/jars/io.delta_delta-spark_2.12-3.2.1.jar,/ivy/jars/io.delta_delta-storage-3.2.1.jar
+      - /tools/silver_benchmark.py
+volumes:
+  experiment-ivy:
+    external: true
+    name: '${DEDUP_EXPERIMENT_IVY:-nodeverse-v2-live_ivy}'

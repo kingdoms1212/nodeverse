@@ -1,36 +1,47 @@
-# Godot generated cache and export credentials
-.godot/
-.import/
-export_credentials.cfg
-
-# Build outputs and generated preview captures
-/build/
-/dist/
-/renders/
-
-# Local editor settings and operating system files
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# Temporary files, logs and Python caches
-*.log
-run_log.txt
-*.tmp
-*.temp
-*.bak
-*~
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-
-# Local environment and secrets
+# ===== 비밀값 (절대 커밋 금지) =====
 .env
 .env.*
 !.env.example
-!.env.sample
 *.pem
 *.key
+*.pfx
+*.keystore
+export_credentials.cfg
+
+# ===== Python =====
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.sqlite3
+*.sqlite
+*.log
+
+# ===== Godot 4 (game/) =====
+.godot/
+.mono/
+/game/build/
+/game/android/
+*.pck
+*.apk
+*.aab
+mono_crash.*.json
+# Godot 실행 파일을 저장소 루트에 두어도 커밋되지 않게
+Godot_v*.exe
+Godot_v*.zip
+
+# ===== Node / 웹 =====
+node_modules/
+dist/
+
+# ===== 툴·OS =====
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.tmp
+Thumbs.db
+Desktop.ini
+.DS_Store

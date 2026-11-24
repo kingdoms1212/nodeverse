@@ -1,0 +1,38 @@
+name: nodeverse-dedup-experiment
+services:
+  compare:
+    image: nodeverse-v2-live-spark:latest
+    # Local test image must contain Spark 3.5.3, Delta Python 3.2.1 and pandas/pyarrow.
+    # Rebuild Dockerfile.spark under a separate tag when that local image is unavailable.
+    user: '0:0'
+    network_mode: none
+    cpus: 2
+    mem_limit: 3g
+    environment:
+      PYTHONPATH: /app:/opt/nodeverse
+      SPARK_LOCAL_IP: 127.0.0.1
+      SHUFFLE_PARTITIONS: '2'
+      COMPARE_ROWS: '${COMPARE_ROWS:-2000}'
+      DEDUP_TTL_HOURS: '${DEDUP_TTL_HOURS:-168}'
+      REMOTE_EXPORT_ENABLED: '0'
+    volumes:
+      - ./spark:/app:ro
+      - ./common:/opt/nodeverse/common:ro
+      - ./tools:/tools:ro
+      - '${DEDUP_EXPERIMENT_OUTPUT:-./results/dedup-stage2-new}:/experiment'
+      - experiment-ivy:/ivy:ro
+    entrypoint: /opt/spark/bin/spark-submit
+    command:
+      - --master
+      - local[2]
+      - --driver-memory
+      - 1g
+      - --conf
+      - spark.driver.host=127.0.0.1
+      - --jars
+      - /ivy/jars/io.delta_delta-spark_2.12-3.2.1.jar,/ivy/jars/io.delta_delta-storage-3.2.1.jar
+      - /tools/dedup_compare.py
+volumes:
+  experiment-ivy:
+    external: true
+    name: '${DEDUP_EXPERIMENT_IVY:-nodeverse-v2-live_ivy}'

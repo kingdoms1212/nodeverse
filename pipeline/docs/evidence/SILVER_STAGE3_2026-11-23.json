@@ -1,0 +1,1046 @@
+{
+  "spark": "3.5.3",
+  "delta": "3.2.1",
+  "results": [
+    {
+      "label": "20000-legacy_unbounded",
+      "wall_ms": 7122,
+      "stage": {
+        "batch_id": 1,
+        "merge_ms": 6460,
+        "outbox_ms": 0,
+        "maintenance_ms": 3,
+        "completed_at": "2026-11-23T02:34:55.918240+00:00"
+      },
+      "commits": [
+        {
+          "version": 1,
+          "metrics": {
+            "numOutputRows": "201",
+            "numTargetBytesAdded": "15711",
+            "numTargetRowsInserted": "201",
+            "numTargetFilesAdded": "2",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "3400",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "3294",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "301",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        }
+      ],
+      "rows": 20000,
+      "mode": "legacy_unbounded",
+      "metadata": {
+        "total_files": 40,
+        "total_bytes": 1831729,
+        "candidate_files": 2,
+        "candidate_bytes": 90671
+      },
+      "replay": {
+        "label": "20000-legacy_unbounded-replay",
+        "wall_ms": 4642,
+        "stage": {
+          "batch_id": 2,
+          "merge_ms": 4088,
+          "outbox_ms": 0,
+          "maintenance_ms": 2,
+          "completed_at": "2026-11-23T02:35:09.711728+00:00"
+        },
+        "commits": [
+          {
+            "version": 1,
+            "metrics": {
+              "numOutputRows": "201",
+              "numTargetBytesAdded": "15711",
+              "numTargetRowsInserted": "201",
+              "numTargetFilesAdded": "2",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "3400",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "3294",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "301",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          }
+        ]
+      },
+      "correct": true
+    },
+    {
+      "label": "20000-current",
+      "wall_ms": 14537,
+      "stage": {
+        "batch_id": 1,
+        "merge_ms": 13822,
+        "outbox_ms": 0,
+        "maintenance_ms": 2,
+        "completed_at": "2026-11-23T02:35:34.028931+00:00"
+      },
+      "commits": [
+        {
+          "version": 3,
+          "metrics": {
+            "numOutputRows": "1",
+            "numTargetBytesAdded": "7133",
+            "numTargetRowsInserted": "1",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "992",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "849",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "1",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 2,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7836",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1946",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "1783",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 1,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7833",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1795",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "1715",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        }
+      ],
+      "rows": 20000,
+      "mode": "current",
+      "metadata": {
+        "total_files": 40,
+        "total_bytes": 1831729,
+        "candidate_files": 2,
+        "candidate_bytes": 90671
+      },
+      "replay": {
+        "label": "20000-current-replay",
+        "wall_ms": 5684,
+        "stage": {
+          "batch_id": 2,
+          "merge_ms": 4835,
+          "outbox_ms": 0,
+          "maintenance_ms": 2,
+          "completed_at": "2026-11-23T02:35:48.905366+00:00"
+        },
+        "commits": [
+          {
+            "version": 3,
+            "metrics": {
+              "numOutputRows": "1",
+              "numTargetBytesAdded": "7133",
+              "numTargetRowsInserted": "1",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "992",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "849",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "1",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 2,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7836",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1946",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "1783",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 1,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7833",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1795",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "1715",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          }
+        ]
+      },
+      "correct": true
+    },
+    {
+      "label": "20000-optimized",
+      "wall_ms": 12665,
+      "stage": {
+        "batch_id": 1,
+        "merge_ms": 11815,
+        "plan_ms": 522,
+        "merge_groups": 3,
+        "input_rows": 301,
+        "outbox_ms": 0,
+        "maintenance_ms": 2,
+        "completed_at": "2026-11-23T02:36:10.583423+00:00"
+      },
+      "commits": [
+        {
+          "version": 3,
+          "metrics": {
+            "numOutputRows": "1",
+            "numTargetBytesAdded": "7133",
+            "numTargetRowsInserted": "1",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1085",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "928",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "1",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 2,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7836",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1190",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "1031",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 1,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7833",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1976",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "1883",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        }
+      ],
+      "rows": 20000,
+      "mode": "optimized",
+      "metadata": {
+        "total_files": 40,
+        "total_bytes": 1831729,
+        "candidate_files": 2,
+        "candidate_bytes": 90671
+      },
+      "replay": {
+        "label": "20000-optimized-replay",
+        "wall_ms": 5854,
+        "stage": {
+          "batch_id": 2,
+          "merge_ms": 4929,
+          "plan_ms": 760,
+          "merge_groups": 3,
+          "input_rows": 301,
+          "outbox_ms": 0,
+          "maintenance_ms": 2,
+          "completed_at": "2026-11-23T02:36:27.976440+00:00"
+        },
+        "commits": [
+          {
+            "version": 3,
+            "metrics": {
+              "numOutputRows": "1",
+              "numTargetBytesAdded": "7133",
+              "numTargetRowsInserted": "1",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1085",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "928",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "1",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 2,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7836",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1190",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "1031",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 1,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7833",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1976",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "1883",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          }
+        ]
+      },
+      "correct": true
+    },
+    {
+      "label": "200000-legacy_unbounded",
+      "wall_ms": 7533,
+      "stage": {
+        "batch_id": 1,
+        "merge_ms": 6760,
+        "outbox_ms": 0,
+        "maintenance_ms": 5,
+        "completed_at": "2026-11-23T02:37:07.566019+00:00"
+      },
+      "commits": [
+        {
+          "version": 1,
+          "metrics": {
+            "numOutputRows": "201",
+            "numTargetBytesAdded": "15711",
+            "numTargetRowsInserted": "201",
+            "numTargetFilesAdded": "2",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "3730",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "3648",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "301",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        }
+      ],
+      "rows": 200000,
+      "mode": "legacy_unbounded",
+      "metadata": {
+        "total_files": 40,
+        "total_bytes": 15390770,
+        "candidate_files": 2,
+        "candidate_bytes": 769962
+      },
+      "replay": {
+        "label": "200000-legacy_unbounded-replay",
+        "wall_ms": 7596,
+        "stage": {
+          "batch_id": 2,
+          "merge_ms": 6939,
+          "outbox_ms": 0,
+          "maintenance_ms": 2,
+          "completed_at": "2026-11-23T02:37:25.266677+00:00"
+        },
+        "commits": [
+          {
+            "version": 1,
+            "metrics": {
+              "numOutputRows": "201",
+              "numTargetBytesAdded": "15711",
+              "numTargetRowsInserted": "201",
+              "numTargetFilesAdded": "2",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "3730",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "3648",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "301",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          }
+        ]
+      },
+      "correct": true
+    },
+    {
+      "label": "200000-current",
+      "wall_ms": 12599,
+      "stage": {
+        "batch_id": 1,
+        "merge_ms": 11916,
+        "outbox_ms": 0,
+        "maintenance_ms": 2,
+        "completed_at": "2026-11-23T02:37:49.333169+00:00"
+      },
+      "commits": [
+        {
+          "version": 3,
+          "metrics": {
+            "numOutputRows": "1",
+            "numTargetBytesAdded": "7133",
+            "numTargetRowsInserted": "1",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1051",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "867",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "1",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 2,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7836",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1063",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "954",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 1,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7833",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "2141",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "2021",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        }
+      ],
+      "rows": 200000,
+      "mode": "current",
+      "metadata": {
+        "total_files": 40,
+        "total_bytes": 15390770,
+        "candidate_files": 2,
+        "candidate_bytes": 769962
+      },
+      "replay": {
+        "label": "200000-current-replay",
+        "wall_ms": 5397,
+        "stage": {
+          "batch_id": 2,
+          "merge_ms": 4884,
+          "outbox_ms": 0,
+          "maintenance_ms": 1,
+          "completed_at": "2026-11-23T02:38:05.881511+00:00"
+        },
+        "commits": [
+          {
+            "version": 3,
+            "metrics": {
+              "numOutputRows": "1",
+              "numTargetBytesAdded": "7133",
+              "numTargetRowsInserted": "1",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1051",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "867",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "1",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 2,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7836",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1063",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "954",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 1,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7833",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "2141",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "2021",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          }
+        ]
+      },
+      "correct": true
+    },
+    {
+      "label": "200000-optimized",
+      "wall_ms": 10125,
+      "stage": {
+        "batch_id": 1,
+        "merge_ms": 8887,
+        "plan_ms": 555,
+        "merge_groups": 3,
+        "input_rows": 301,
+        "outbox_ms": 0,
+        "maintenance_ms": 2,
+        "completed_at": "2026-11-23T02:38:25.217002+00:00"
+      },
+      "commits": [
+        {
+          "version": 3,
+          "metrics": {
+            "numOutputRows": "1",
+            "numTargetBytesAdded": "7133",
+            "numTargetRowsInserted": "1",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "838",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "676",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "1",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 2,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7836",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1041",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "931",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        },
+        {
+          "version": 1,
+          "metrics": {
+            "numOutputRows": "100",
+            "numTargetBytesAdded": "7833",
+            "numTargetRowsInserted": "100",
+            "numTargetFilesAdded": "1",
+            "numTargetRowsMatchedDeleted": "0",
+            "numTargetFilesRemoved": "0",
+            "numTargetRowsMatchedUpdated": "0",
+            "executionTimeMs": "1141",
+            "numTargetDeletionVectorsUpdated": "0",
+            "numTargetRowsCopied": "0",
+            "rewriteTimeMs": "1051",
+            "numTargetRowsUpdated": "0",
+            "numTargetDeletionVectorsRemoved": "0",
+            "numTargetRowsDeleted": "0",
+            "scanTimeMs": "0",
+            "numSourceRows": "150",
+            "numTargetDeletionVectorsAdded": "0",
+            "numTargetChangeFilesAdded": "0",
+            "numTargetRowsNotMatchedBySourceUpdated": "0",
+            "numTargetRowsNotMatchedBySourceDeleted": "0",
+            "numTargetBytesRemoved": "0"
+          }
+        }
+      ],
+      "rows": 200000,
+      "mode": "optimized",
+      "metadata": {
+        "total_files": 40,
+        "total_bytes": 15390770,
+        "candidate_files": 2,
+        "candidate_bytes": 769962
+      },
+      "replay": {
+        "label": "200000-optimized-replay",
+        "wall_ms": 5523,
+        "stage": {
+          "batch_id": 2,
+          "merge_ms": 4728,
+          "plan_ms": 593,
+          "merge_groups": 3,
+          "input_rows": 301,
+          "outbox_ms": 0,
+          "maintenance_ms": 2,
+          "completed_at": "2026-11-23T02:38:40.920343+00:00"
+        },
+        "commits": [
+          {
+            "version": 3,
+            "metrics": {
+              "numOutputRows": "1",
+              "numTargetBytesAdded": "7133",
+              "numTargetRowsInserted": "1",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "838",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "676",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "1",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 2,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7836",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1041",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "931",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          },
+          {
+            "version": 1,
+            "metrics": {
+              "numOutputRows": "100",
+              "numTargetBytesAdded": "7833",
+              "numTargetRowsInserted": "100",
+              "numTargetFilesAdded": "1",
+              "numTargetRowsMatchedDeleted": "0",
+              "numTargetFilesRemoved": "0",
+              "numTargetRowsMatchedUpdated": "0",
+              "executionTimeMs": "1141",
+              "numTargetDeletionVectorsUpdated": "0",
+              "numTargetRowsCopied": "0",
+              "rewriteTimeMs": "1051",
+              "numTargetRowsUpdated": "0",
+              "numTargetDeletionVectorsRemoved": "0",
+              "numTargetRowsDeleted": "0",
+              "scanTimeMs": "0",
+              "numSourceRows": "150",
+              "numTargetDeletionVectorsAdded": "0",
+              "numTargetChangeFilesAdded": "0",
+              "numTargetRowsNotMatchedBySourceUpdated": "0",
+              "numTargetRowsNotMatchedBySourceDeleted": "0",
+              "numTargetBytesRemoved": "0"
+            }
+          }
+        ]
+      },
+      "correct": true
+    }
+  ],
+  "event_log": {
+    "stage3:20000-legacy_unbounded": {
+      "task_input_bytes": 2875588,
+      "task_input_records": 20183,
+      "tasks": 22,
+      "stages": 13
+    },
+    "stage3:20000-legacy_unbounded-replay": {
+      "task_input_bytes": 2762929,
+      "task_input_records": 20250,
+      "tasks": 13,
+      "stages": 8
+    },
+    "stage3:20000-current": {
+      "task_input_bytes": 904932,
+      "task_input_records": 1558,
+      "tasks": 59,
+      "stages": 36
+    },
+    "stage3:20000-current-replay": {
+      "task_input_bytes": 475192,
+      "task_input_records": 1345,
+      "tasks": 35,
+      "stages": 22
+    },
+    "stage3:20000-optimized": {
+      "task_input_bytes": 794692,
+      "task_input_records": 1551,
+      "tasks": 49,
+      "stages": 29
+    },
+    "stage3:20000-optimized-replay": {
+      "task_input_bytes": 364733,
+      "task_input_records": 1338,
+      "tasks": 25,
+      "stages": 15
+    },
+    "stage3:200000-legacy_unbounded": {
+      "task_input_bytes": 3887777,
+      "task_input_records": 200183,
+      "tasks": 22,
+      "stages": 13
+    },
+    "stage3:200000-legacy_unbounded-replay": {
+      "task_input_bytes": 3774436,
+      "task_input_records": 200250,
+      "tasks": 13,
+      "stages": 8
+    },
+    "stage3:200000-current": {
+      "task_input_bytes": 955959,
+      "task_input_records": 10558,
+      "tasks": 59,
+      "stages": 36
+    },
+    "stage3:200000-current-replay": {
+      "task_input_bytes": 525897,
+      "task_input_records": 10345,
+      "tasks": 35,
+      "stages": 22
+    },
+    "stage3:200000-optimized": {
+      "task_input_bytes": 845273,
+      "task_input_records": 10551,
+      "tasks": 49,
+      "stages": 29
+    },
+    "stage3:200000-optimized-replay": {
+      "task_input_bytes": 415180,
+      "task_input_records": 10338,
+      "tasks": 25,
+      "stages": 15
+    }
+  },
+  "event_log_parser": "chronological task-end attribution",
+  "outbox_memory": {
+    "rows": 100000,
+    "scope": "Python allocations; counting sink; no DB/RSS measurement",
+    "before": {
+      "rows": 100000,
+      "max_call_rows": 100000,
+      "python_peak_bytes": 79579052
+    },
+    "after": {
+      "rows": 100000,
+      "max_call_rows": 500,
+      "python_peak_bytes": 801620
+    }
+  },
+  "baseline_commit": "44b4214"
+}

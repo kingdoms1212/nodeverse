@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1060" viewBox="0 0 1800 1060" font-family="'Malgun Gothic',sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f6f4f"/></marker>
+<marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+<style>
+.zone{fill:#f6f7f9;stroke:#c9ced6;stroke-width:1.5}.zt{font-size:15px;font-weight:700;fill:#4a5260}
+.box{fill:#fff;stroke:#7d8796;stroke-width:1.5}.store{fill:#f1f6ff;stroke:#5b7fb3;stroke-width:1.5}.gap{fill:#fff5f4;stroke:#c0392b;stroke-width:1.6;stroke-dasharray:6 4}
+.t{font-size:15px;font-weight:700;fill:#1f2430}.s{font-size:12.5px;fill:#4a5260}
+.flow{stroke:#2f6f4f;stroke-width:2;fill:none;marker-end:url(#a)}.err{stroke:#c0392b;stroke-width:2;fill:none;stroke-dasharray:6 4;marker-end:url(#r)}
+.good{font-size:12.5px;font-weight:700;fill:#1e7d4f}.bad{font-size:12.5px;font-weight:700;fill:#c0392b}.note{font-size:12.5px;fill:#4a5260}
+.lbl{font-size:12px;fill:#2f6f4f}.lbr{font-size:12px;fill:#c0392b}
+</style></defs>
+<rect x="0" y="0" width="1800" height="1060" fill="#fff"/>
+<text x="30" y="42" font-size="24" font-weight="700" fill="#1f2430">① 공용 git 정리 시점 — 파이프라인 처리 흐름</text>
+<text x="30" y="68" class="s">NVG feature/codex-v2-remote-sink 32b0248 · 결정 기록 D1~D29 반영 상태 · 빨간 글씨 = 문제 지점</text>
+<rect class="zone" x="20" y="90" width="200" height="300" rx="14"/><text class="zt" x="34" y="114">게임 PC</text>
+<rect class="zone" x="240" y="90" width="1230" height="840" rx="14"/><text class="zt" x="254" y="114">파이프라인 PC (Docker Compose)</text>
+<rect class="zone" x="1490" y="90" width="290" height="840" rx="14"/><text class="zt" x="1504" y="114">서버 쪽 (DB · Django)</text>
+<rect class="box" x="36" y="130" width="168" height="110" rx="10"/>
+<text class="t" x="50" y="156">게임 EXE</text>
+<text class="s" x="50" y="178">학습·업데이트 이벤트</text>
+<text class="s" x="50" y="197">POST /v2/events</text>
+<text class="s" x="50" y="216">X-API-Key</text>
+<rect class="box" x="36" y="260" width="168" height="90" rx="10"/>
+<text class="t" x="50" y="286">launcher.exe</text>
+<text class="s" x="50" y="308">실행·종료 이벤트</text>
+<text class="s" x="50" y="327">POST /v1/events</text>
+<rect class="gap" x="260" y="130" width="200" height="90" rx="10"/>
+<text class="t" x="274" y="156">게이트웨이 :8000</text>
+<text class="s" x="274" y="178">v1 + v2 브리지</text>
+<text class="s" x="274" y="197">(이 저장소 밖, PL-1)</text>
+<rect class="box" x="260" y="250" width="200" height="200" rx="10"/>
+<text class="t" x="274" y="276">수집기 FastAPI :8003</text>
+<text class="s" x="274" y="298">① 키 확인 (24자 이상)</text>
+<text class="s" x="274" y="317">② JSON·스키마 검사</text>
+<text class="s" x="274" y="336">③ 토픽 분류</text>
+<text class="s" x="274" y="355">④ Kafka acks=all 확인</text>
+<text class="s" x="274" y="374">202 접수 · 422 + DLQ</text>
+<text class="s" x="274" y="393">503 재전송 요청</text>
+<text class="bad" x="262" y="476">⚠ Kafka 장애 시 요청당 최대 12초 대기 → 503</text>
+<text class="bad" x="262" y="495">⚠ 폴링 스레드 예외 무방비</text>
+<text class="bad" x="262" y="514">⚠ 전달 상태 조회: Mongo 장애 시 500</text>
+<path class="flow" d="M204,185 L260,175"/>
+<path class="flow" d="M204,305 C232,305 232,205 260,205"/>
+<path class="flow" d="M360,220 L360,250"/>
+<rect class="box" x="490" y="130" width="210" height="330" rx="10"/>
+<text class="t" x="504" y="156">Kafka 3대 (복제 3, 7일)</text>
+<rect class="box" x="504" y="170" width="182" height="48" rx="8"/><text class="s" x="516" y="190" font-weight="700">nv.learning.v2</text><text class="s" x="516" y="208">파티션 6 · session_id</text>
+<path class="flow" d="M460,300 L504,194"/>
+<rect class="box" x="504" y="228" width="182" height="48" rx="8"/><text class="s" x="516" y="248" font-weight="700">nv.update.v1</text><text class="s" x="516" y="266">파티션 3 · player_id</text>
+<path class="flow" d="M460,312 L504,252"/>
+<rect class="box" x="504" y="286" width="182" height="48" rx="8"/><text class="s" x="516" y="306" font-weight="700">nv.runtime.v1</text><text class="s" x="516" y="324">파티션 3 · run_id</text>
+<path class="flow" d="M460,324 L504,310"/>
+<rect class="gap" x="504" y="350" width="182" height="48" rx="8"/><text class="s" x="516" y="370" font-weight="700">nv.dlq.v1 (3)</text><text class="lbr" x="516" y="388">읽는 곳 없음 (PL-8)</text>
+<rect class="box" x="504" y="404" width="182" height="44" rx="8" stroke-dasharray="4 3"/><text class="s" x="516" y="423" font-weight="700">nv.bundle.v2 (3)</text><text class="s" x="516" y="440">예약 · 미사용</text>
+<path class="err" d="M460,420 L504,374"/>
+<rect class="box" x="730" y="130" width="420" height="560" rx="10"/>
+<text class="t" x="744" y="156">Spark 3.5 + Delta Lake (앱 1개 · 쿼리 8개)</text>
+<rect class="box" x="748" y="172" width="384" height="62" rx="10"/>
+<text class="t" x="762" y="198">bronze → bronze.game_events</text>
+<text class="s" x="762" y="220">Kafka 원본 그대로 append · 5초</text>
+<rect class="box" x="748" y="250" width="384" height="96" rx="10"/>
+<text class="t" x="762" y="276">silver_learning / silver_update</text>
+<text class="s" x="762" y="298">필수 필드 → 상태 저장소 중복 제거(7일)</text>
+<text class="s" x="762" y="317">→ insert-only MERGE · 1초</text>
+<text class="s" x="762" y="336">→ outbox 적재 (원격 내보내기 켤 때)</text>
+<text class="bad" x="750" y="365">⚠ MERGE 조건: event_id 하나 → 매 배치 전체 스캔</text>
+<rect class="gap" x="748" y="382" width="384" height="56" rx="10"/>
+<text class="t" x="762" y="408">silver_audit → silver.quarantine</text>
+<text class="s" x="762" y="430">id_conflict · invalid_json · invalid_schema</text>
+<rect class="box" x="748" y="452" width="384" height="76" rx="10"/>
+<text class="t" x="762" y="478">gold_1m · gold_alert · gold_update</text>
+<text class="s" x="762" y="500">1분·5분 집계 → Delta MERGE(창 하한)</text>
+<text class="s" x="762" y="519">→ MongoDB rt_* upsert</text>
+<rect class="box" x="748" y="542" width="186" height="56" rx="10"/>
+<text class="t" x="762" y="568">remote_runtime</text>
+<text class="s" x="762" y="590">런처 이벤트 → outbox</text>
+<rect class="box" x="946" y="542" width="186" height="56" rx="10"/>
+<text class="t" x="960" y="568">주기 작업</text>
+<text class="s" x="960" y="590">rt_summary 10초 · 버전 60초</text>
+<text class="bad" x="750" y="620">⚠ delta_stream.py 한 파일 484줄</text>
+<text class="bad" x="750" y="639">⚠ 쿼리 하나 실패 → 앱 전체 정지·재시작</text>
+<text class="bad" x="750" y="658">⚠ Mongo 쓰기 재시도 없음</text>
+<path class="flow" d="M686,194 L748,203"/>
+<path class="flow" d="M686,252 L748,203"/>
+<path class="flow" d="M686,310 L748,203"/>
+<path class="flow" d="M940,234 L940,250"/>
+<path class="err" d="M1132,203 C1150,203 1150,410 1132,410"/>
+<path class="flow" d="M748,320 C735,320 735,490 748,490"/>
+<rect class="zone" x="1180" y="130" width="270" height="400" rx="12" fill="#eef4fb"/><text class="zt" x="1194" y="152">로컬 MongoDB</text>
+<rect class="store" x="1196" y="166" width="238" height="92" rx="10"/>
+<text class="t" x="1210" y="192">rt_* 실시간 집계</text>
+<text class="s" x="1210" y="214">rt_minigame_1m · rt_alerts</text>
+<text class="s" x="1210" y="233">rt_updates · rt_versions</text>
+<text class="s" x="1210" y="252">rt_summary</text>
+<rect class="store" x="1196" y="274" width="238" height="150" rx="10"/>
+<text class="t" x="1210" y="300">remote_event_outbox</text>
+<text class="s" x="1210" y="322">pending → processing →</text>
+<text class="s" x="1210" y="341">stored / quarantined</text>
+<text class="s" x="1210" y="360">waiting_context · retrying</text>
+<text class="s" x="1210" y="379">blocked</text>
+<text class="bad" x="1198" y="446">⚠ 이벤트마다 Mongo 왕복 2회</text>
+<path class="flow" d="M1132,490 C1160,490 1160,212 1196,212"/>
+<path class="flow" d="M1132,300 C1165,300 1165,340 1196,340"/>
+<path class="flow" d="M840,598 L840,608 L1166,608 L1166,404 L1196,404"/>
+<rect class="box" x="1180" y="560" width="270" height="110" rx="10"/>
+<text class="t" x="1194" y="586">원격 적재 작업자 (lease 1개)</text>
+<text class="s" x="1194" y="608">outbox → 원본 보관 → 관계형 투영</text>
+<text class="s" x="1194" y="627">(세션·문제 실행·시도·이벤트)</text>
+<text class="s" x="1194" y="646">rt_* 사본 복사</text>
+<text class="bad" x="1182" y="694">⚠ 1건씩 처리 · 매 건 MySQL 새 연결 + GET_LOCK</text>
+<text class="bad" x="1182" y="713">⚠ 실측 초당 17~24건 (유입의 1/8)</text>
+<text class="bad" x="1182" y="732">⚠ 대기·재시도 무한, blocked 안 보임</text>
+<text class="bad" x="1182" y="759">⚠ 5초마다 rt_* 전체 복사 (같은 루프)</text>
+<path class="flow" d="M1420,424 L1420,560"/>
+<rect class="gap" x="260" y="740" width="900" height="150" rx="10"/>
+<text class="t" x="274" y="766">이 시점의 예외 처리 요약</text>
+<text class="s" x="274" y="788">수집기: 401 키 · 413 16KiB · 422 + DLQ · 503 Kafka (최대 12초 대기)</text>
+<text class="s" x="274" y="807">Spark: 같은 ID 다른 내용 → quarantine · 쿼리 하나 실패 → 전체 재시작 · Mongo 쓰기 재시도 없음</text>
+<text class="s" x="274" y="826">원격 작업자: 회원 매핑·순서 빈칸 → waiting_context 무한 재시도 · 일시 오류 → retrying 무한</text>
+<text class="s" x="274" y="845">               데이터 충돌 → blocked (영구 정지, 화면에 안 보임) · 끝난 행 영구 보관</text>
+<rect class="store" x="1506" y="166" width="258" height="96" rx="10"/>
+<text class="t" x="1520" y="192">MySQL</text>
+<text class="s" x="1520" y="214">game_members (회원)</text>
+<text class="s" x="1520" y="233">game_accounts · 관리자</text>
+<rect class="store" x="1506" y="280" width="258" height="170" rx="10"/>
+<text class="t" x="1520" y="306">MongoDB (서버용)</text>
+<text class="s" x="1520" y="328">game_sessions · problem_runs</text>
+<text class="s" x="1520" y="347">solution_attempts</text>
+<text class="s" x="1520" y="366">gameplay_events</text>
+<text class="s" x="1520" y="385">pipeline_learning_events</text>
+<text class="s" x="1520" y="404">rt_* 사본</text>
+<rect class="box" x="1506" y="520" width="258" height="150" rx="10"/>
+<text class="t" x="1520" y="546">Django 서버</text>
+<text class="s" x="1520" y="568">/staff/ 개요·이벤트·회원</text>
+<text class="s" x="1520" y="587">/staff/live 실시간</text>
+<text class="s" x="1520" y="606">/api/game/auth/* · manifest</text>
+<text class="note" x="1508" y="694">· 실시간: rt_* · 분석: 세션·시도·이벤트</text>
+<path class="flow" d="M1450,600 C1478,600 1478,214 1506,214"/>
+<path class="flow" d="M1450,620 C1485,620 1485,365 1506,365"/>
+<path class="flow" d="M1635,450 L1635,520"/>
+<text class="lbl" x="1642" y="490">읽기</text>
+<rect x="1180" y="950" width="600" height="90" rx="8" fill="#f6f7f9" stroke="#c9ced6"/>
+<path class="flow" d="M1196,975 L1240,975"/><text class="s" x="1248" y="979">데이터 흐름</text>
+<path class="err" d="M1350,975 L1394,975"/><text class="s" x="1402" y="979">오류·거절 경로</text>
+<rect class="store" x="1520" y="964" width="30" height="20" rx="4"/><text class="s" x="1558" y="979">저장소</text>
+<text class="good" x="1196" y="1012">✔ 바뀐·개선된 부분</text><text class="bad" x="1360" y="1012">⚠ 문제·남은 과제</text><text class="note" x="1520" y="1012">· 설명</text>
+</svg>

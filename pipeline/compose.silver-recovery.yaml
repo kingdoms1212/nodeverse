@@ -1,0 +1,36 @@
+name: nodeverse-silver-recovery
+services:
+  mongo:
+    image: mongo:7.0.16
+    networks: [isolated]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+  experiment:
+    image: nodeverse-v2-live-spark:latest
+    user: "0:0"
+    depends_on:
+      mongo: {condition: service_healthy}
+    networks: [isolated]
+    environment:
+      PYTHONPATH: /app/spark:/app:/app/tools
+      SPARK_LOCAL_IP: 127.0.0.1
+      SILVER_OPTIMIZATION_ENABLED: "1"
+      REMOTE_EXPORT_ENABLED: "1"
+      OUTBOX_STAGE_CHUNK: "100"
+      SINK_RETRY_ATTEMPTS: "1"
+      COMPACT_EVERY_BATCHES: "0"
+      MONGO_URI: mongodb://mongo:27017
+      SHUFFLE_PARTITIONS: "2"
+    volumes:
+      - .:/app:ro
+      - '${SILVER_RECOVERY_OUTPUT:-./results/silver-recovery}:/experiment'
+      - ivy:/ivy:ro
+    entrypoint: /opt/spark/bin/spark-submit
+    command: ["--master", "local[2]", "--driver-memory", "1g", "--conf", "spark.driver.host=127.0.0.1", "--jars", "/ivy/jars/io.delta_delta-spark_2.12-3.2.1.jar,/ivy/jars/io.delta_delta-storage-3.2.1.jar", "/app/tools/silver_recovery_experiment.py"]
+networks:
+  isolated: {internal: true}
+volumes:
+  ivy: {external: true, name: "${DEDUP_EXPERIMENT_IVY:-nodeverse-v2-live_ivy}"}

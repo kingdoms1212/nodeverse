@@ -1,0 +1,336 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1780" viewBox="0 0 2400 1780" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif">
+<defs>
+<marker id="m-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f6f4f"/></marker>
+<marker id="m-ctrl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3b78c2"/></marker>
+<marker id="m-fail" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+<marker id="m-read" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b8a8a"/></marker>
+</defs>
+<rect width="2400" height="1780" fill="#ffffff"/>
+<text x="30" y="42" font-size="28" font-weight="800" fill="#1f2430">NODEVERSE 파이프라인 동작 아키텍처</text>
+<text x="30" y="70" font-size="15" fill="#5b6472">2026-11-21 · 1~8차 보완 반영 · 배지 = 그 부분을 바꾼 보완 차수 · 실선 = 데이터, 파선 = 기동·상태 확인, 점선 = 화면 조회, 빨간 점선 = 실패 경로</text>
+<rect x="30" y="100" width="340" height="330" rx="10" fill="#fdf3e3" stroke="#d08a2c" stroke-width="2"/>
+<text x="42" y="124" font-size="16" font-weight="700" fill="#7a4a0c">게임 클라이언트 (Godot)</text>
+<text x="44" y="144" font-size="13.5" fill="#2a3442" xml:space="preserve">학습 이벤트 v2 · UUIDv7 event_id</text>
+<text x="44" y="163.5" font-size="13.5" fill="#2a3442" xml:space="preserve">세션 안 sequence 1, 2, 3 …</text>
+<rect x="44" y="171.0" width="22" height="16" rx="4" fill="#b8506a"/><text x="55" y="184.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5차</text>
+<text x="72" y="183.0" font-size="13.5" fill="#2a3442" xml:space="preserve">플레이어가 바뀌면 새 세션·run·attempt</text>
+<text x="44" y="202.5" font-size="13.5" fill="#2a3442" xml:space="preserve">디스크 큐 user://telemetry/</text>
+<text x="44" y="222.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  pending/ → 전송 성공 시 삭제</text>
+<text x="44" y="241.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  rejected/ (4xx, 6일 만료)</text>
+<rect x="44" y="249.0" width="22" height="16" rx="4" fill="#b8506a"/><text x="55" y="262.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5차</text>
+<text x="72" y="261.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  corrupt/ (깨진 파일, 사유 보관)</text>
+<rect x="44" y="268.5" width="22" height="16" rx="4" fill="#b8506a"/><text x="55" y="281.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5차</text>
+<text x="72" y="280.5" font-size="13.5" fill="#2a3442" xml:space="preserve">임시 파일 → 확인 → 교체</text>
+<text x="44" y="300.0" font-size="13.5" fill="#2a3442" xml:space="preserve">401 보관 후 60초 재시도</text>
+<text x="44" y="319.5" font-size="13.5" fill="#2a3442" xml:space="preserve">408·429·5xx·연결 실패 → 재시도</text>
+<text x="44" y="339.0" font-size="13.5" fill="#2a3442" xml:space="preserve">모르는 미니게임 ID는 전송 안 함</text>
+<rect x="400" y="100" width="350" height="330" rx="10" fill="#e8f1fb" stroke="#3b78c2" stroke-width="2"/>
+<text x="412" y="124" font-size="16" font-weight="700" fill="#1d4d86">수집기 collector (FastAPI :8000)</text>
+<text x="414" y="144" font-size="13.5" fill="#2a3442" xml:space="preserve">POST /v2/events (X-API-Key)</text>
+<text x="414" y="163.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  계약 검증 contract.py</text>
+<text x="414" y="183.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  Kafka acks=all 확인 후 202</text>
+<text x="414" y="202.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  검증 실패 → 422 + DLQ 1건</text>
+<text x="414" y="222.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  Kafka 실패(5초) → 503, 재전송</text>
+<text x="414" y="241.5" font-size="13.5" fill="#2a3442" xml:space="preserve">GET /v2/events/{id} 원격 적재 상태</text>
+<rect x="414" y="249.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="425" y="262.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="442" y="261.0" font-size="13.5" fill="#2a3442" xml:space="preserve">/health/ready = Kafka 수집 준비</text>
+<text x="414" y="280.5" font-size="13.5" fill="#2a3442" xml:space="preserve">      (리더·ISR ≥ 2, Mongo와 무관)</text>
+<rect x="414" y="288.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="425" y="301.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="442" y="300.0" font-size="13.5" fill="#2a3442" xml:space="preserve">/health/deps = 브로커별·수집·Mongo</text>
+<text x="414" y="319.5" font-size="13.5" fill="#2a3442" xml:space="preserve">uvicorn 2 workers · 멱등 프로듀서</text>
+<rect x="830" y="100" width="400" height="330" rx="10" fill="#eef0fb" stroke="#5560b8" stroke-width="2"/>
+<text x="842" y="124" font-size="16" font-weight="700" fill="#2d357a">Kafka KRaft 3대 (kafka-1·2·3)</text>
+<text x="844" y="144" font-size="13.5" fill="#2a3442" xml:space="preserve">복제 3 · 최소 ISR 2 · 보관 7일</text>
+<text x="844" y="163.5" font-size="13.5" fill="#2a3442" xml:space="preserve">nv.learning.v2  6파티션 (key session_id)</text>
+<text x="844" y="183.0" font-size="13.5" fill="#2a3442" xml:space="preserve">nv.update.v1    3파티션</text>
+<text x="844" y="202.5" font-size="13.5" fill="#2a3442" xml:space="preserve">nv.runtime.v1   3파티션</text>
+<text x="844" y="222.0" font-size="13.5" fill="#2a3442" xml:space="preserve">nv.dlq.v1       3파티션 (422 원문 4KB)</text>
+<text x="844" y="241.5" font-size="13.5" fill="#2a3442" xml:space="preserve">nv.bundle.v2    3파티션 (예약)</text>
+<text x="844" y="261.0" font-size="13.5" fill="#2a3442" xml:space="preserve">브로커 헬스체크: nc -z (생존만)</text>
+<rect x="844" y="268.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="855" y="281.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="872" y="280.5" font-size="13.5" fill="#2a3442" xml:space="preserve">준비 판단은 Python 검사가 담당</text>
+<text x="844" y="300.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    브로커 1대 정지: 해당 브로커만 이상,</text>
+<text x="844" y="319.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    수집 준비는 유지 (ISR 2)</text>
+<rect x="1270" y="100" width="470" height="330" rx="10" fill="#f4f5f7" stroke="#7b8494" stroke-width="2"/>
+<text x="1282" y="124" font-size="16" font-weight="700" fill="#3b4250">기동 순서·상태 확인 common/health.py</text>
+<rect x="1284" y="132" width="22" height="16" rx="4" fill="#3b78c2"/><text x="1295" y="145" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="1312" y="144" font-size="13.5" fill="#2a3442" xml:space="preserve">topic-init (Python 이미지)</text>
+<text x="1284" y="163.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    AdminClient.create_topics()</text>
+<text x="1284" y="183.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    있는 토픽 유지, 5초×36회 재시도,</text>
+<text x="1284" y="202.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    리더·ISR 확인까지 통과해야 종료 0</text>
+<rect x="1284" y="210.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="1295" y="223.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="1312" y="222.0" font-size="13.5" fill="#2a3442" xml:space="preserve">deps-ready (일회성)</text>
+<text x="1284" y="241.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    MongoDB ping ok:1 (3초 제한)</text>
+<text x="1284" y="261.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    + Kafka 수집 준비 → 종료 0</text>
+<text x="1284" y="280.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    → 그 뒤 Spark·원격 작업자 기동</text>
+<rect x="1284" y="288.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="1295" y="301.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="1312" y="300.0" font-size="13.5" fill="#2a3442" xml:space="preserve">브로커별 메타데이터 요청,</text>
+<text x="1284" y="319.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    응답한 브로커 이름까지 확인</text>
+<text x="1284" y="339.0" font-size="13.5" fill="#2a3442" xml:space="preserve">Mongo 헬스체크: /dev/tcp (연결 진단)</text>
+<rect x="1780" y="100" width="590" height="330" rx="10" fill="#e9f6f6" stroke="#2b8a8a" stroke-width="2"/>
+<text x="1792" y="124" font-size="16" font-weight="700" fill="#145a5a">관리자 서버 Django (127.0.0.1:8010)</text>
+<text x="1794" y="144" font-size="13.5" fill="#2a3442" xml:space="preserve">/staff/live 실시간 현황 (3초마다 조회)</text>
+<text x="1794" y="163.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  최근 1분 이벤트·5분 세션 + 1분 전 대비 ▲▼</text>
+<text x="1794" y="183.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  미니게임 성공률 30분 · 실패 급증 경고</text>
+<text x="1794" y="202.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  분석 화면 적재 상태 카드 (outbox 상태)</text>
+<rect x="1794" y="210.0" width="22" height="16" rx="4" fill="#2f8a57"/><text x="1805" y="223.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="1822" y="222.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  거절·격리 이벤트 카드 (PL-8)</text>
+<rect x="1794" y="229.5" width="22" height="16" rx="4" fill="#6b4fb8"/><text x="1805" y="242.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">7차</text>
+<text x="1822" y="241.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  도착 시각 기준 + 늦게 도착 N건 표시</text>
+<text x="1794" y="261.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  업데이트 탭: 팩 다운로드·버전 보급률</text>
+<text x="1794" y="280.5" font-size="13.5" fill="#2a3442" xml:space="preserve">/staff/ 전체 현황 · 게임 분석 · 플레이어 · 행동 로그 (플레이 시각 기준)</text>
+<text x="1794" y="300.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  원격 대시보드 DB의 세션·시도·이벤트</text>
+<text x="1794" y="319.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  참조가 아직 없으면 건너뜀 (500 없음)</text>
+<text x="1794" y="339.0" font-size="13.5" fill="#2a3442" xml:space="preserve">회원 MySQL: 계정·클라우드 저장 (게임 로그인 API)</text>
+<path d="M370,230 L400,230" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="385" y="222" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">HTTP</text>
+<path d="M750,200 L830,200" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="790" y="192" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">202 전에</text>
+<path d="M750,300 L830,300" fill="none" stroke="#c0392b" stroke-width="2.4" stroke-dasharray="4 4" marker-end="url(#m-fail)"/>
+<text x="790" y="292" font-size="12.5" font-weight="700" fill="#c0392b" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">422 → DLQ</text>
+<path d="M1270,210 L1230,210" fill="none" stroke="#3b78c2" stroke-width="2.4" stroke-dasharray="7 5" marker-end="url(#m-ctrl)"/>
+<text x="1250" y="202" font-size="12.5" font-weight="700" fill="#3b78c2" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">토픽 생성</text>
+<path d="M1505,430 L1505,470" fill="none" stroke="#3b78c2" stroke-width="2.4" stroke-dasharray="7 5" marker-end="url(#m-ctrl)"/>
+<text x="1560" y="456" font-size="12.5" font-weight="700" fill="#3b78c2" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">기동 허용</text>
+<rect x="30" y="470" width="1200" height="560" rx="14" fill="#eaf6ef" stroke="#2f8a57" stroke-width="2.2"/>
+<text x="46" y="498" font-size="19" font-weight="700" fill="#1d5a38">Spark 3.5 + Delta 3.2 (단일 앱, local[4])</text>
+<text x="46" y="518" font-size="13" fill="#5b6472">spark/delta_stream.py 감독: 실패한 쿼리만 재시작, 10분에 5회 넘으면 컨테이너 재시작 · 쿼리마다 자기 체크포인트</text>
+<rect x="50" y="530" width="250" height="140" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="62" y="554" font-size="16" font-weight="700" fill="#2a3442">bronze (5초)</text>
+<text x="64" y="574" font-size="13.5" fill="#2a3442" xml:space="preserve">Kafka 3토픽 → Delta append</text>
+<text x="64" y="593.5" font-size="13.5" fill="#2a3442" xml:space="preserve">원문 그대로 (재전송도 보존)</text>
+<text x="64" y="613.0" font-size="13.5" fill="#2a3442" xml:space="preserve">maxOffsetsPerTrigger 10,000</text>
+<rect x="320" y="530" width="400" height="150" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="332" y="554" font-size="16" font-weight="700" fill="#2a3442">silver_learning / silver_update (1초)</text>
+<text x="334" y="574" font-size="13.5" fill="#2a3442" xml:space="preserve">명시 스키마 · 불완전 행 제외</text>
+<text x="334" y="593.5" font-size="13.5" fill="#2a3442" xml:space="preserve">중복 제거: 상태 저장소 7일 (kafka_ts)</text>
+<text x="334" y="613.0" font-size="13.5" fill="#2a3442" xml:space="preserve">insert-only MERGE: event_id</text>
+<text x="334" y="632.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  + event_date [lo−7일, hi+1일] + v7 ID 범위</text>
+<rect x="334" y="640.0" width="22" height="16" rx="4" fill="#6b4fb8"/><text x="345" y="653.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">7차</text>
+<text x="362" y="652.0" font-size="13.5" fill="#2a3442" xml:space="preserve">ID 생성일별 묶음마다 MERGE (늦은 ID 분리)</text>
+<text x="334" y="671.5" font-size="13.5" fill="#2a3442" xml:space="preserve">→ 원격 outbox 적재 (500건 bulk)</text>
+<rect x="320" y="695" width="400" height="125" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="332" y="719" font-size="16" font-weight="700" fill="#2a3442">silver_audit (30초)</text>
+<text x="334" y="739" font-size="13.5" fill="#2a3442" xml:space="preserve">topic:event_id → payload_hash 상태 7일</text>
+<text x="334" y="758.5" font-size="13.5" fill="#2a3442" xml:space="preserve">같은 ID·다른 본문 → id_conflict</text>
+<text x="334" y="778.0" font-size="13.5" fill="#2a3442" xml:space="preserve">JSON·스키마 오류 → invalid_*</text>
+<text x="334" y="797.5" font-size="13.5" fill="#2a3442" xml:space="preserve">→ silver.quarantine (원문 보존)</text>
+<rect x="740" y="530" width="470" height="150" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="752" y="554" font-size="16" font-weight="700" fill="#2a3442">gold 쿼리 (1초, 워터마크 2·10분)</text>
+<text x="754" y="574" font-size="13.5" fill="#2a3442" xml:space="preserve">gold_1m: 1분 텀블링 미니게임 시도·성공·실패</text>
+<rect x="754" y="581.5" width="22" height="16" rx="4" fill="#6b4fb8"/><text x="765" y="594.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">7차</text>
+<text x="782" y="593.5" font-size="13.5" fill="#2a3442" xml:space="preserve">gold_alert: 5분 창 1분 이동, 정시 이벤트만</text>
+<text x="754" y="613.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  실패 급증 (시도 20↑·실패율 0.4↑·1.5배↑)</text>
+<text x="754" y="632.5" font-size="13.5" fill="#2a3442" xml:space="preserve">gold_update: 5분 창 업데이트·팩 다운로드</text>
+<text x="754" y="652.0" font-size="13.5" fill="#2a3442" xml:space="preserve">Delta MERGE (window_start 하한) → rt_*</text>
+<rect x="740" y="695" width="470" height="125" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="752" y="719" font-size="16" font-weight="700" fill="#2a3442">MongoDB 게시 sinks.py</text>
+<text x="754" y="739" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_* _id 교체 upsert, 5회 재시도</text>
+<rect x="754" y="746.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="765" y="759.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="782" y="758.5" font-size="13.5" fill="#2a3442" xml:space="preserve">최종 실패 창 → metrics/gold-republish.json</text>
+<rect x="754" y="766.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="765" y="779.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="782" y="778.0" font-size="13.5" fill="#2a3442" xml:space="preserve">Mongo 복구 후 Gold Delta에서 다시 게시</text>
+<text x="754" y="797.5" font-size="13.5" fill="#2a3442" xml:space="preserve">outbox 실패는 예외 → 배치 재실행</text>
+<rect x="50" y="690" width="250" height="130" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="62" y="714" font-size="16" font-weight="700" fill="#2a3442">remote_runtime</text>
+<text x="64" y="734" font-size="13.5" fill="#2a3442" xml:space="preserve">bronze runtime 이벤트</text>
+<text x="64" y="753.5" font-size="13.5" fill="#2a3442" xml:space="preserve">→ 원격 outbox</text>
+<text x="64" y="773.0" font-size="13.5" fill="#2a3442" xml:space="preserve">(REMOTE_EXPORT_ENABLED=1)</text>
+<rect x="50" y="840" width="1160" height="170" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="62" y="864" font-size="16" font-weight="700" fill="#2a3442">드라이버 주기 작업 spark/periodic.py (10초 루프)</text>
+<rect x="64" y="872" width="22" height="16" rx="4" fill="#2f8a57"/><text x="75" y="885" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="92" y="884" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_summary 10초: 최근 5분만 먼저 걸러 집계  [7] 늦게 도착 건수 함께 (총계 포함)</text>
+<rect x="64" y="891.5" width="22" height="16" rx="4" fill="#2f8a57"/><text x="75" y="904.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="92" y="903.5" font-size="13.5" fill="#2a3442" xml:space="preserve">버전 보급률 60초: 같으면 MERGE·재쓰기 생략  [7] 최신 판단은 플레이 시각 순</text>
+<rect x="64" y="911.0" width="22" height="16" rx="4" fill="#2f8a57"/><text x="75" y="924.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="92" y="923.0" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_rejects 60초 (PL-8): Kafka nv.dlq.v1 24시간 + silver.quarantine → 60분·24시간 건수, 사유, 최근 5건</text>
+<rect x="64" y="930.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="75" y="943.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="92" y="942.5" font-size="13.5" fill="#2a3442" xml:space="preserve">Gold 재게시 대기분이 있으면 처리 · 진행 파일 metrics/streaming-progress.json (sink 실패, 재시작, 재게시 대기)</text>
+<text x="64" y="962.0" font-size="13.5" fill="#2a3442" xml:space="preserve">로그: rt_summary·버전·rt_rejects 소요 시간 (주기 작업 비용 관측)</text>
+<path d="M1030,430 L1030,452 L16,452 L16,600 L50,600" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="600" y="446" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">구독 (learning·update·runtime)</text>
+<path d="M300,600 L320,600" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<path d="M300,640 L310,640 L310,757 L320,757" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<path d="M720,600 L740,600" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<path d="M975,680 L975,695" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<rect x="1270" y="470" width="470" height="560" rx="14" fill="#f3eefb" stroke="#7d57b8" stroke-width="2.2"/>
+<text x="1286" y="498" font-size="19" font-weight="700" fill="#4c2f7a">Delta Lake (볼륨 lake:/data)</text>
+<rect x="1290" y="510" width="430" height="330" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="1302" y="534" font-size="16" font-weight="700" fill="#2a3442">테이블</text>
+<text x="1304" y="554" font-size="13.5" fill="#2a3442" xml:space="preserve">bronze.game_events (ingest_date)</text>
+<text x="1304" y="573.5" font-size="13.5" fill="#2a3442" xml:space="preserve">silver.learning_events (event_date)</text>
+<text x="1304" y="593.0" font-size="13.5" fill="#2a3442" xml:space="preserve">silver.update_events (event_date)</text>
+<text x="1304" y="612.5" font-size="13.5" fill="#2a3442" xml:space="preserve">silver.quarantine</text>
+<text x="1304" y="632.0" font-size="13.5" fill="#2a3442" xml:space="preserve">gold.minigame_1m</text>
+<text x="1304" y="651.5" font-size="13.5" fill="#2a3442" xml:space="preserve">gold.failure_alerts</text>
+<text x="1304" y="671.0" font-size="13.5" fill="#2a3442" xml:space="preserve">gold.update_progress_5m</text>
+<text x="1304" y="690.5" font-size="13.5" fill="#2a3442" xml:space="preserve">gold.version_adoption</text>
+<text x="1304" y="710.0" font-size="13.5" fill="#2a3442" xml:space="preserve">checkpoints/ (쿼리별)</text>
+<text x="1304" y="729.5" font-size="13.5" fill="#2a3442" xml:space="preserve">metrics/streaming-progress.json</text>
+<rect x="1304" y="737.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="1315" y="750.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="1332" y="749.0" font-size="13.5" fill="#2a3442" xml:space="preserve">metrics/gold-republish.json</text>
+<rect x="1290" y="855" width="430" height="155" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="1302" y="879" font-size="16" font-weight="700" fill="#2a3442">압축·정리 spark/compaction.py</text>
+<rect x="1304" y="887" width="22" height="16" rx="4" fill="#c47a12"/><text x="1315" y="900" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6차</text>
+<text x="1332" y="899" font-size="13.5" fill="#2a3442" xml:space="preserve">자동 압축 끔 (매 배치 파티션 재작성 제거)</text>
+<rect x="1304" y="906.5" width="22" height="16" rx="4" fill="#c47a12"/><text x="1315" y="919.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6차</text>
+<text x="1332" y="918.5" font-size="13.5" fill="#2a3442" xml:space="preserve">쓰기 스레드가 300배치마다 작은 파일만</text>
+<rect x="1304" y="926.0" width="22" height="16" rx="4" fill="#c47a12"/><text x="1315" y="939.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6차</text>
+<text x="1332" y="938.0" font-size="13.5" fill="#2a3442" xml:space="preserve">Bronze 10분 · VACUUM 6시간 (보존 7일)</text>
+<text x="1304" y="957.5" font-size="13.5" fill="#2a3442" xml:space="preserve">ZORDER(maintain.py): 현행 유지, 스트림 정지 후</text>
+<path d="M1210,560 L1290,560" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="1250" y="552" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">MERGE·append</text>
+<rect x="1780" y="470" width="590" height="560" rx="14" fill="#f3eefb" stroke="#7d57b8" stroke-width="2.2"/>
+<text x="1796" y="498" font-size="19" font-weight="700" fill="#4c2f7a">로컬 MongoDB nodeverse_logs (mongo:7.0)</text>
+<rect x="1800" y="510" width="550" height="225" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="1812" y="534" font-size="16" font-weight="700" fill="#2a3442">실시간 집계 rt_*</text>
+<text x="1814" y="554" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_summary (10초) · rt_minigame_1m · rt_alerts</text>
+<text x="1814" y="573.5" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_updates · rt_versions (60초, 바뀔 때만)</text>
+<rect x="1814" y="581.0" width="22" height="16" rx="4" fill="#2f8a57"/><text x="1825" y="594.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="1842" y="593.0" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_rejects (60초, PL-8)</text>
+<text x="1814" y="612.5" font-size="13.5" fill="#2a3442" xml:space="preserve">pipeline_sink_status (원격 작업자 상태)</text>
+<rect x="1814" y="620.0" width="22" height="16" rx="4" fill="#2f8a57"/><text x="1825" y="633.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="1842" y="632.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  상태별 개수 10초 = 인덱스만 (문서 0건 읽기)</text>
+<rect x="1814" y="639.5" width="22" height="16" rx="4" fill="#2f8a57"/><text x="1825" y="652.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="1842" y="651.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  사유 상위 10 = 60초</text>
+<rect x="1800" y="750" width="550" height="260" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="1812" y="774" font-size="16" font-weight="700" fill="#2a3442">원격 적재 대기열·상태</text>
+<text x="1814" y="794" font-size="13.5" fill="#2a3442" xml:space="preserve">remote_event_outbox (_id = event_id)</text>
+<text x="1814" y="813.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  pending → processing → stored / quarantined</text>
+<text x="1814" y="833.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  waiting_context · retrying · parked · blocked</text>
+<text x="1814" y="852.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  완료 행 30일 TTL</text>
+<text x="1814" y="872.0" font-size="13.5" fill="#2a3442" xml:space="preserve">remote_projection_receipts · remote_session_cursors</text>
+<text x="1814" y="891.5" font-size="13.5" fill="#2a3442" xml:space="preserve">remote_sequence_registry · remote_run_contexts</text>
+<text x="1814" y="911.0" font-size="13.5" fill="#2a3442" xml:space="preserve">remote_worker_lease (작업자 1개 보장)</text>
+<path d="M1210,740 L1252,740 L1252,1078 L1758,1078 L1758,600 L1800,600" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="1500" y="1094" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">rt_* 게시</text>
+<path d="M720,640 L730,640 L730,830 L1240,830 L1240,1050 L1772,1050 L1772,820 L1800,820" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="1500" y="1045" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">outbox 적재</text>
+<path d="M2075,470 L2075,430" fill="none" stroke="#2b8a8a" stroke-width="2.4" stroke-dasharray="2 4" marker-end="url(#m-read)"/>
+<text x="2150" y="456" font-size="12.5" font-weight="700" fill="#2b8a8a" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">rt_* · 상태 카드</text>
+<rect x="30" y="1130" width="1200" height="600" rx="14" fill="#fbeef0" stroke="#b8506a" stroke-width="2.2"/>
+<text x="46" y="1158" font-size="19" font-weight="700" fill="#7a2238">원격 작업자 remote-writer (remote/worker.py, --profile remote)</text>
+<text x="46" y="1178" font-size="13" fill="#5b6472">lease 1개 · 200건 묶음 선점 · 세션별 그룹 8스레드 · MySQL 풀 8 · GET_LOCK 1회 · 이벤트당 DB 왕복 약 26 → 10회 (8차)</text>
+<rect x="50" y="1200" width="370" height="230" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="62" y="1224" font-size="16" font-weight="700" fill="#2a3442">선점 claim_batch</text>
+<text x="64" y="1244" font-size="13.5" fill="#2a3442" xml:space="preserve">기한 된 행 200개 후보 조회</text>
+<rect x="64" y="1251.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="75" y="1264.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="92" y="1263.5" font-size="13.5" fill="#2a3442" xml:space="preserve">claim_id 토큰을 붙여 processing</text>
+<rect x="64" y="1271.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="75" y="1284.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="92" y="1283.0" font-size="13.5" fill="#2a3442" xml:space="preserve">토큰이 붙은 행만 다시 읽어 처리</text>
+<rect x="64" y="1290.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="75" y="1303.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="92" y="1302.5" font-size="13.5" fill="#2a3442" xml:space="preserve">결과 기록도 토큰이 맞을 때만</text>
+<text x="64" y="1322.0" font-size="13.5" fill="#2a3442" xml:space="preserve">   (운영자 park·재선점이 이김)</text>
+<text x="64" y="1341.5" font-size="13.5" fill="#2a3442" xml:space="preserve">멈춘 processing → 5분 뒤 pending</text>
+<text x="64" y="1361.0" font-size="13.5" fill="#2a3442" xml:space="preserve">   (토큰 제거)</text>
+<rect x="440" y="1200" width="390" height="230" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="452" y="1224" font-size="16" font-weight="700" fill="#2a3442">처리 process_job</text>
+<rect x="454" y="1232" width="22" height="16" rx="4" fill="#3b78c2"/><text x="465" y="1245" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="482" y="1244" font-size="13.5" fill="#2a3442" xml:space="preserve">원격 원본 archive: 시도마다 확인</text>
+<rect x="454" y="1251.5" width="22" height="16" rx="4" fill="#2b8a8a"/><text x="465" y="1264.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">8차</text>
+<text x="482" y="1263.5" font-size="13.5" fill="#2a3442" xml:space="preserve">삽입 우선 ensure, 회원 캐시, 세션 묶음 캐시</text>
+<text x="454" y="1283.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    (DB 교체·복원 뒤 다시 채움)</text>
+<text x="454" y="1302.5" font-size="13.5" fill="#2a3442" xml:space="preserve">투영 project(archived=True)</text>
+<text x="454" y="1322.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  회원 확인 (MySQL, 확인된 매핑만 생성)</text>
+<text x="454" y="1341.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  순번 커서 = 앞 순번까지 처리됐는지</text>
+<text x="454" y="1361.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  문제·세션·run·attempt·gameplay_events</text>
+<rect x="454" y="1368.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="465" y="1381.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="482" y="1380.5" font-size="13.5" fill="#2a3442" xml:space="preserve">영수증 → 다음 순번 깨우기</text>
+<text x="454" y="1400.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    (재실행 때도 다시 깨움)</text>
+<rect x="850" y="1200" width="360" height="230" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="862" y="1224" font-size="16" font-weight="700" fill="#2a3442">상태 결정</text>
+<text x="864" y="1244" font-size="13.5" fill="#2a3442" xml:space="preserve">stored / quarantined (격리 원본 보존)</text>
+<rect x="864" y="1251.5" width="22" height="16" rx="4" fill="#3b78c2"/><text x="875" y="1264.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="892" y="1263.5" font-size="13.5" fill="#2a3442" xml:space="preserve">연속 순번인데 고칠 수 없는 누락</text>
+<text x="864" y="1283.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    (attempt_id 없음 등) → 격리</text>
+<text x="864" y="1302.5" font-size="13.5" fill="#2a3442" xml:space="preserve">waiting_context: 앞 순번 10분,</text>
+<text x="864" y="1322.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  회원 매핑 24시간 → parked</text>
+<text x="864" y="1341.5" font-size="13.5" fill="#2a3442" xml:space="preserve">retrying: 2~60초, 20회 → parked</text>
+<rect x="864" y="1349.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="875" y="1362.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="892" y="1361.0" font-size="13.5" fill="#2a3442" xml:space="preserve">requeue 때 retry_base로 새 예산</text>
+<text x="864" y="1380.5" font-size="13.5" fill="#2a3442" xml:space="preserve">blocked: 데이터 충돌 (즉시 정지)</text>
+<rect x="50" y="1450" width="560" height="260" rx="10" fill="#ffffff" stroke="#b9c3cf" stroke-width="1.2"/>
+<text x="62" y="1474" font-size="16" font-weight="700" fill="#2a3442">보조 스레드</text>
+<text x="64" y="1494" font-size="13.5" fill="#2a3442" xml:space="preserve">heartbeat 10초: lease 연장</text>
+<text x="64" y="1513.5" font-size="13.5" fill="#2a3442" xml:space="preserve">metrics 5초: 바뀐 rt_* 만 대시보드 DB로 복사</text>
+<rect x="64" y="1521.0" width="22" height="16" rx="4" fill="#2f8a57"/><text x="75" y="1534.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="92" y="1533.0" font-size="13.5" fill="#2a3442" xml:space="preserve">status 10초: 상태 개수(인덱스) → pipeline_sink_status</text>
+<text x="64" y="1552.5" font-size="13.5" fill="#2a3442" xml:space="preserve">     (로컬·대시보드 DB 둘 다), 사유는 60초</text>
+<text x="64" y="1572.0" font-size="13.5" fill="#2a3442" xml:space="preserve">revive 60초: 회원 추가·매핑 파일 변경 시</text>
+<text x="64" y="1591.5" font-size="13.5" fill="#2a3442" xml:space="preserve">     member_mapping_required 보관 행 재개</text>
+<text x="64" y="1611.0" font-size="13.5" fill="#2a3442" xml:space="preserve">parked 순번 빈칸은 앞 순번 저장 즉시 재개</text>
+<rect x="630" y="1450" width="580" height="260" rx="10" fill="#f4f5f7" stroke="#7b8494" stroke-width="2"/>
+<text x="642" y="1474" font-size="16" font-weight="700" fill="#3b4250">운영 도구</text>
+<text x="644" y="1494" font-size="13.5" fill="#2a3442" xml:space="preserve">python -m remote.requeue status | requeue | park</text>
+<rect x="644" y="1501.5" width="22" height="16" rx="4" fill="#2f8a57"/><text x="655" y="1514.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="672" y="1513.5" font-size="13.5" fill="#2a3442" xml:space="preserve">python -m tools.dlq_peek --minutes 60 [--raw]</text>
+<rect x="644" y="1521.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="655" y="1534.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="672" y="1533.0" font-size="13.5" fill="#2a3442" xml:space="preserve">python -m common.health report | wait | topics</text>
+<text x="644" y="1552.5" font-size="13.5" fill="#2a3442" xml:space="preserve">python spark/maintain.py --execute (ZORDER)</text>
+<rect x="644" y="1560.0" width="22" height="16" rx="4" fill="#b8506a"/><text x="655" y="1573.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5차</text>
+<text x="672" y="1572.0" font-size="13.5" fill="#2a3442" xml:space="preserve">tools/dummy_data.py --reverse-sessions N</text>
+<text x="644" y="1591.5" font-size="13.5" fill="#2a3442" xml:space="preserve">probe_latency.py: 수집→화면 지연 (15초 기준)</text>
+<rect x="644" y="1599.0" width="22" height="16" rx="4" fill="#b8506a"/><text x="655" y="1612.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5차</text>
+<text x="672" y="1611.0" font-size="13.5" fill="#2a3442" xml:space="preserve">게임 헤드리스 시험 test_disk_queue.gd</text>
+<path d="M420,1310 L440,1310" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<path d="M830,1310 L850,1310" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<path d="M2075,1010 L2075,1110 L240,1110 L240,1200" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="900" y="1104" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">기한 된 행 선점</text>
+<rect x="1270" y="1130" width="470" height="200" rx="10" fill="#f3eefb" stroke="#7d57b8" stroke-width="2"/>
+<text x="1282" y="1154" font-size="16" font-weight="700" fill="#4c2f7a">원격 MySQL (회원)</text>
+<text x="1284" y="1174" font-size="13.5" fill="#2a3442" xml:space="preserve">game_members (member_id, external_member_key)</text>
+<text x="1284" y="1193.5" font-size="13.5" fill="#2a3442" xml:space="preserve">확인된 매핑(verified)만 회원 생성</text>
+<text x="1284" y="1213.0" font-size="13.5" fill="#2a3442" xml:space="preserve">data_source = live 만 적재</text>
+<text x="1284" y="1232.5" font-size="13.5" fill="#2a3442" xml:space="preserve">GET_LOCK: 다른 적재 도구와 동시 쓰기 방지</text>
+<text x="1284" y="1252.0" font-size="13.5" fill="#2a3442" xml:space="preserve">DBUtils PooledDB 8 연결</text>
+<rect x="1270" y="1350" width="470" height="380" rx="10" fill="#f3eefb" stroke="#7d57b8" stroke-width="2"/>
+<text x="1282" y="1374" font-size="16" font-weight="700" fill="#4c2f7a">대시보드 MongoDB (원격)</text>
+<text x="1284" y="1394" font-size="13.5" fill="#2a3442" xml:space="preserve">원본 보관 pipeline_learning_events</text>
+<text x="1284" y="1413.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  pipeline_update_events · pipeline_runtime_events</text>
+<text x="1284" y="1433.0" font-size="13.5" fill="#2a3442" xml:space="preserve">분석 관계 game_problems · game_sessions</text>
+<text x="1284" y="1452.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  problem_runs · solution_attempts</text>
+<text x="1284" y="1472.0" font-size="13.5" fill="#2a3442" xml:space="preserve">  gameplay_events (event_id 기준 1건)</text>
+<text x="1284" y="1491.5" font-size="13.5" fill="#2a3442" xml:space="preserve">격리 pipeline_quarantined_events (원본+사유)</text>
+<text x="1284" y="1511.0" font-size="13.5" fill="#2a3442" xml:space="preserve">rt_* 사본 (metrics 스레드)</text>
+<text x="1284" y="1530.5" font-size="13.5" fill="#2a3442" xml:space="preserve">pipeline_sink_status (적재 상태)</text>
+<text x="1284" y="1550.0" font-size="13.5" fill="#2a3442" xml:space="preserve">모든 쓰기 ensure(): 있으면 같은 내용인지만</text>
+<text x="1284" y="1569.5" font-size="13.5" fill="#2a3442" xml:space="preserve">  확인, 다르면 충돌 (덮어쓰기 없음)</text>
+<path d="M635,1200 L635,1190 L1250,1190 L1250,1230 L1270,1230" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="1000" y="1184" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">회원 확인 (MySQL 풀)</text>
+<path d="M1210,1400 L1270,1400" fill="none" stroke="#2f6f4f" stroke-width="2.4" marker-end="url(#m-data)"/>
+<text x="1240" y="1393" font-size="12.5" font-weight="700" fill="#2f6f4f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">기록</text>
+<path d="M1505,1730 L1505,1758 L2388,1758 L2388,265 L2370,265" fill="none" stroke="#2b8a8a" stroke-width="2.4" stroke-dasharray="2 4" marker-end="url(#m-read)"/>
+<text x="1950" y="1752" font-size="12.5" font-weight="700" fill="#2b8a8a" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="4">분석 화면 조회 (세션·시도·이벤트)</text>
+<rect x="1800" y="1130" width="570" height="600" rx="10" fill="#f4f5f7" stroke="#7b8494" stroke-width="2"/>
+<text x="1812" y="1154" font-size="16" font-weight="700" fill="#3b4250">보완 차수와 실측 (로컬 PC 기준)</text>
+<text x="1814" y="1174" font-size="13.5" fill="#2a3442" xml:space="preserve">1차: 모듈 분리, 쿼리별 재시작, sink 재시도,</text>
+<text x="1814" y="1193.5" font-size="13.5" fill="#2a3442" xml:space="preserve">     MERGE 7일+v7 범위, 원격 작업자 묶음·풀</text>
+<text x="1814" y="1213.0" font-size="13.5" fill="#2a3442" xml:space="preserve">     → 끝까지 적재 초당 17~24건 → 60~90건</text>
+<text x="1814" y="1232.5" font-size="13.5" fill="#2a3442" xml:space="preserve">2차 (PL-9): 대기 기한 → parked, 상태 카드</text>
+<rect x="1814" y="1240.0" width="22" height="16" rx="4" fill="#2f8a57"/><text x="1825" y="1253.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3차</text>
+<text x="1842" y="1252.0" font-size="13.5" fill="#2a3442" xml:space="preserve">CPU 경량화 + PL-8 거절·격리 표시</text>
+<text x="1814" y="1271.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    유휴 p95: Kafka 120%→6%, Mongo 39%→5%</text>
+<rect x="1814" y="1279.0" width="22" height="16" rx="4" fill="#3b78c2"/><text x="1825" y="1292.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4차</text>
+<text x="1842" y="1291.0" font-size="13.5" fill="#2a3442" xml:space="preserve">신뢰성 P1 6건 + 프로토콜 헬스체크</text>
+<text x="1814" y="1310.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    Mongo 130초 정지: 202 접수 유지,</text>
+<text x="1814" y="1330.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    Gold 창 재게시, 재시작 0</text>
+<rect x="1814" y="1337.5" width="22" height="16" rx="4" fill="#b8506a"/><text x="1825" y="1350.5" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5차</text>
+<text x="1842" y="1349.5" font-size="13.5" fill="#2a3442" xml:space="preserve">게임 디스크 큐·계정 전환, P2 시험</text>
+<text x="1814" y="1369.0" font-size="13.5" fill="#2a3442" xml:space="preserve">    6,000건·역순 30세션: 섞임·누락 0</text>
+<text x="1814" y="1388.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    같은 ID 재전송: Silver 1행, Gold 불변</text>
+<rect x="1814" y="1396.0" width="22" height="16" rx="4" fill="#c47a12"/><text x="1825" y="1409.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6차</text>
+<text x="1842" y="1408.0" font-size="13.5" fill="#2a3442" xml:space="preserve">Silver MERGE 단계 5.35초 → 1.55초,</text>
+<text x="1814" y="1427.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    시험 1회 디스크 +420MB → +2MB</text>
+<rect x="1814" y="1435.0" width="22" height="16" rx="4" fill="#6b4fb8"/><text x="1825" y="1448.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">7차</text>
+<text x="1842" y="1447.0" font-size="13.5" fill="#2a3442" xml:space="preserve">늦게 도착: 사흘 전 602건 → 실시간 표시,</text>
+<text x="1814" y="1466.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    경고에서만 제외 (366 vs 282, 차이 84 = 늦은 시도)</text>
+<rect x="1814" y="1474.0" width="22" height="16" rx="4" fill="#2b8a8a"/><text x="1825" y="1487.0" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">8차</text>
+<text x="1842" y="1486.0" font-size="13.5" fill="#2a3442" xml:space="preserve">원격 적재 순수 처리 34.7 → 219건/초,</text>
+<text x="1814" y="1505.5" font-size="13.5" fill="#2a3442" xml:space="preserve">    초당 200건 유입을 따라감 (평균 대기 2.9초)</text>
+<text x="1814" y="1525.0" font-size="13.5" fill="#2a3442" xml:space="preserve"></text>
+<text x="1814" y="1544.5" font-size="13.5" fill="#2a3442" xml:space="preserve">남은 과제</text>
+<text x="1814" y="1564.0" font-size="13.5" fill="#2a3442" xml:space="preserve">· 최신 EXE 실제 종단 시험, 디스크 부족 재현</text>
+<text x="1814" y="1583.5" font-size="13.5" fill="#2a3442" xml:space="preserve">· Silver 같은 배치 중복 선택 규칙 (설계 검토)</text>
+<text x="1814" y="1603.0" font-size="13.5" fill="#2a3442" xml:space="preserve">· 중복 제거 상태 TTL 축소, DLQ 재처리 스크립트</text>
+<text x="1814" y="1622.5" font-size="13.5" fill="#2a3442" xml:space="preserve">· 대량 수집 시 중복 제거 TTL 48h 전환 (시험 완료)</text>
+</svg>
